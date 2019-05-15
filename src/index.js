@@ -72,3 +72,79 @@ function displayBreed(element){
 })
 
     //Challenge 2
+=======
+const imgUrl = "https://dog.ceo/api/breeds/image/random/4"
+const breedUrl = 'https://dog.ceo/api/breeds/list/all'
+
+
+
+fetch(imgUrl)
+ .then(function(response){
+   return response.json()
+ })
+ .then(function(data){
+   data.message.forEach(function(image_url){
+     displayImage(image_url)
+   })
+ })
+
+function displayImage(image_url){
+ let dogPic = document.createElement('img')
+ dogPic.src = image_url
+ dogPic.height = 200
+ document.querySelector("#dog-image-container").append(dogPic)
+}
+
+//Challenge 2
+
+
+
+function displayBreedsThatStartWith(startsWith){
+  fetch(breedUrl)
+   .then(function(response){
+     return response.json()
+   })
+   .then(function(data){
+     let keys = Object.keys(data.message)
+     document.querySelector("#dog-breeds").removeChildren
+     keys.forEach(function(key){
+       if (data.message[key].length == 0){
+         if (key.charAt(0) == startsWith){
+           displayBreed(key)
+         }
+       }
+       else {
+         data.message[key].forEach(function(minor_breed){
+           if (minor_breed.charAt(0) == startsWith){
+             displayBreed(`${minor_breed} ${key}`)
+           }
+         })
+       }
+     })
+   })
+ }
+
+function displayBreed(element){
+ let li = document.createElement('li')
+ let colors = ["red","blue","orange","brown","yellow","black","turquoise"]
+ li.innerText=element
+ //Challenge 3 - To add color change on click
+ li.addEventListener("click", function(e){
+   this.style.color = colors[Math.floor(Math.random() * colors.length)]
+ })
+ //
+ document.querySelector("#dog-breeds").append(li)
+}
+
+//Challenge 4
+
+// function sleep(n) {
+//   let i=0
+//   while(i<(12**8)*n) {i++}
+// }
+
+
+displayBreedsThatStartWith(breedDropdown.value)
+breedDropdown.addEventListener("change",displayBreedsThatStartWith(breedDropdown.value))
+})
+
